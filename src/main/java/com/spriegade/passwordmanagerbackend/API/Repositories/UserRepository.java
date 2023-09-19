@@ -1,0 +1,12 @@
+package com.spriegade.passwordmanagerbackend.API.Repositories;
+
+import com.spriegade.passwordmanagerbackend.API.Entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, String> {
+
+    //    Role: Repositories are responsible for database interactions. They abstract away the low-level database operations and provide a higher-level interface to interact with the database.
+    //    Functionality: Repositories typically include methods for common database operations like creating, reading, updating, and deleting records. They also allow you to define custom queries using method names or SQL queries.
+    //    Example: A UserRepository would provide methods for creating, finding, updating, and deleting user records in the database.
+    User findByEmail(String email);
+}
