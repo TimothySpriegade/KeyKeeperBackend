@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+
 import static com.spriegade.passwordmanagerbackend.API.constants.UserApiConstants.*;
 
 @RestController
@@ -44,8 +48,14 @@ public class UserController {
     @GetMapping(VALIDATE_MASTER_PASSWORD)
     public ResponseEntity<String> validateMasterPassword(@RequestParam String email, String masterPassword) {
         User user = userRepository.findByEmail(email);
+
         if (user == null) {
             return ResponseEntity.notFound().build();
+        }
+        if (userService.isSessionDate3DaysOld(user.getEmail())){
+            user.setSessionToken(null);
+            user.setSessionTokenCreated(null);
+            userRepository.save(user);
         }
         if (!masterPassword.equals(user.getMasterPassword())){
             return ResponseEntity.notFound().build();
@@ -53,15 +63,18 @@ public class UserController {
         if (user.getSessionToken() == null){
             SessionTokenGeneratorService sessionTokenGenerator = new SessionTokenGeneratorService();
             String sessionToken = sessionTokenGenerator.generateSessionToken();
+            Calendar calendar = Calendar.getInstance();
+            user.setSessionTokenCreated(calendar.getTime());
             user.setSessionToken(sessionToken);
             userRepository.save(user);
+
             return ResponseEntity.ok(sessionToken);
         }
         return ResponseEntity.ok(user.getSessionToken());
     }
 
     //testurL: http://localhost:8080/userApi/validatePassword?email=timothyspriegade@outlook.de&masterPassword=e0f661fbbaebfc70bde48c2b6bb88c08c54cd2c49f5c848e92cdc33554d6f37f
-
+    //TODO: muss Create User Neu schreiben
     @PostMapping(CREATE_NEW_USER)
     public ResponseEntity<String> createUser(@RequestBody User user) {
         User existingUser = userRepository.findByEmail(user.getEmail());

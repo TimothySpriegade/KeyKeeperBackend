@@ -5,6 +5,9 @@ import com.spriegade.passwordmanagerbackend.API.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Service
 public class UserService {
     //    Role: Services contain the business logic of your application. They encapsulate and manage complex operations that involve multiple entities or repositories.
@@ -26,5 +29,16 @@ public class UserService {
         newUser.setEmail(email);
         newUser.setMasterPassword(masterPassword);
         userRepository.save(newUser);
+    }
+
+    public boolean isSessionDate3DaysOld(String email){
+        User user = userRepository.findByEmail(email);
+        if (user != null && user.getSessionTokenCreated() != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -3);
+            Date sessionTokenDeadline = calendar.getTime();
+            return user.getSessionTokenCreated().before(sessionTokenDeadline);
+        }
+        return false;
     }
 }

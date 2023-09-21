@@ -1,11 +1,10 @@
 package com.spriegade.passwordmanagerbackend.API.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,11 +18,15 @@ public class User {
     private String masterPassword;
     @Column
     private String sessionToken;
+    @Column
+    @Temporal(TemporalType.DATE)
+    private Date sessionTokenCreated;
 
-    public User(String email, String masterPassword, String sessionToken) {
+    public User(String email, String masterPassword, String sessionToken, Date sessionTokenCreated) {
         this.masterPassword = masterPassword;
         this.email = email;
         this.sessionToken = sessionToken;
+        this.sessionTokenCreated = sessionTokenCreated;
     }
 
     public User() {
