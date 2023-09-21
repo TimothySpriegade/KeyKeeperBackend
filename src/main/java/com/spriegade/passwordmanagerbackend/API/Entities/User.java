@@ -17,10 +17,13 @@ public class User {
     private String email;
     @Column(name = "masterpassword")
     private String masterPassword;
+    @Column
+    private String sessionToken;
 
-    public User(String email, String masterPassword) {
+    public User(String email, String masterPassword, String sessionToken) {
         this.masterPassword = masterPassword;
         this.email = email;
+        this.sessionToken = sessionToken;
     }
 
     public User() {

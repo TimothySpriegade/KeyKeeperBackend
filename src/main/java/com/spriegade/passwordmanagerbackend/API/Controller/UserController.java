@@ -3,6 +3,7 @@ package com.spriegade.passwordmanagerbackend.API.Controller;
 import com.spriegade.passwordmanagerbackend.API.ApiServices.UserService;
 import com.spriegade.passwordmanagerbackend.API.Entities.User;
 import com.spriegade.passwordmanagerbackend.API.Repositories.UserRepository;
+import com.spriegade.passwordmanagerbackend.Services.SessionTokenGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,17 +42,22 @@ public class UserController {
     }
 
     @GetMapping(VALIDATE_MASTER_PASSWORD)
-    public ResponseEntity<Boolean> validateMasterPassword(@RequestParam String email, String masterPassword) {
+    public ResponseEntity<String> validateMasterPassword(@RequestParam String email, String masterPassword) {
         User user = userRepository.findByEmail(email);
-        if (user != null) {
-            if (user.getMasterPassword().equals(masterPassword)) {
-                return ResponseEntity.ok(true);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
+        if (user == null) {
             return ResponseEntity.notFound().build();
         }
+        if (!masterPassword.equals(user.getMasterPassword())){
+            return ResponseEntity.notFound().build();
+        }
+        if (user.getSessionToken() == null){
+            SessionTokenGeneratorService sessionTokenGenerator = new SessionTokenGeneratorService();
+            String sessionToken = sessionTokenGenerator.generateSessionToken();
+            user.setSessionToken(sessionToken);
+            userRepository.save(user);
+            return ResponseEntity.ok(sessionToken);
+        }
+        return ResponseEntity.ok(user.getSessionToken());
     }
 
     //testurL: http://localhost:8080/userApi/validatePassword?email=timothyspriegade@outlook.de&masterPassword=e0f661fbbaebfc70bde48c2b6bb88c08c54cd2c49f5c848e92cdc33554d6f37f
