@@ -1,11 +1,14 @@
-package com.spriegade.passwordmanagerbackend.Services;
+package com.spriegade.passwordmanagerbackend.utils;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-public class SessionTokenGeneratorService {
-
-    public SessionTokenGeneratorService() {
-    }
+@Component
+@RequiredArgsConstructor
+public class SessionTokenGenerator {
+    private final HashSHA256Encryptor hashEncryptor;
 
     public String generateSessionToken() {
         Random random = new Random();
@@ -15,7 +18,6 @@ public class SessionTokenGeneratorService {
             sessionTokenChars[i] = alphabet.charAt(random.nextInt(alphabet.length()));
         }
         String sessionTokenToHash = new String(sessionTokenChars);
-        HashSHA256Service hashService = new HashSHA256Service();
-        return  hashService.hashStringSHA256(sessionTokenToHash);
+        return hashEncryptor.hashStringSHA256(sessionTokenToHash);
     }
 }

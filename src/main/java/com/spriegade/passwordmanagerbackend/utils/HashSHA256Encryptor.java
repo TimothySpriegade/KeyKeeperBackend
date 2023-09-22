@@ -1,22 +1,20 @@
-package com.spriegade.passwordmanagerbackend.Services;
+package com.spriegade.passwordmanagerbackend.utils;
 
+
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashSHA256Service {
-
-    public HashSHA256Service() {
-    }
-
+@Component
+@NoArgsConstructor
+public class HashSHA256Encryptor {
     public String hashStringSHA256(String stringToHash) {
         try {
-
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-
             byte[] hashBytes = digest.digest(stringToHash.getBytes());
-
 
             StringBuilder hexString = new StringBuilder();
             for (byte hashByte : hashBytes) {

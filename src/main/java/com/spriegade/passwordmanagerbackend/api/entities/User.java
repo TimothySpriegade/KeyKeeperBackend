@@ -1,36 +1,37 @@
 package com.spriegade.passwordmanagerbackend.api.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.Date;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "userdata")
 public class User {
 
     @Id
-    private String email;
-    @Column(name = "masterpassword")
+    @GeneratedValue
+    private Long id;
+
+    @NaturalId
+    private String username;
+
+    @Column
     private String masterPassword;
+
     @Column
     private String sessionToken;
+
     @Column
     @Temporal(TemporalType.DATE)
     private Date sessionTokenCreated;
 
-    public User(String email, String masterPassword, String sessionToken, Date sessionTokenCreated) {
-        this.masterPassword = masterPassword;
-        this.email = email;
-        this.sessionToken = sessionToken;
-        this.sessionTokenCreated = sessionTokenCreated;
-    }
-
-    public User() {
-
-    }
-
+    @Column
+    @OneToMany
+    private List<Password> passwords;
 }
