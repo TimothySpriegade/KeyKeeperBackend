@@ -1,10 +1,11 @@
-package com.spriegade.passwordmanagerbackend.API.ApiServices;
+package com.spriegade.passwordmanagerbackend.api.services;
 
-import com.spriegade.passwordmanagerbackend.API.Entities.User;
-import com.spriegade.passwordmanagerbackend.API.Repositories.UserRepository;
+import com.spriegade.passwordmanagerbackend.api.entities.User;
+import com.spriegade.passwordmanagerbackend.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 

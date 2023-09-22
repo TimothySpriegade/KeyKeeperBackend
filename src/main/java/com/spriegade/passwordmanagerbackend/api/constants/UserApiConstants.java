@@ -1,4 +1,4 @@
-package com.spriegade.passwordmanagerbackend.API.constants;
+package com.spriegade.passwordmanagerbackend.api.constants;
 
 public class UserApiConstants {
     public static final String USER_API = "userApi";

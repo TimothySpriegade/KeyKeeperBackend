@@ -1,18 +1,16 @@
-package com.spriegade.passwordmanagerbackend.API.Controller;
+package com.spriegade.passwordmanagerbackend.api.controller;
 
-import com.spriegade.passwordmanagerbackend.API.ApiServices.UserService;
-import com.spriegade.passwordmanagerbackend.API.Entities.User;
-import com.spriegade.passwordmanagerbackend.API.Repositories.UserRepository;
+import com.spriegade.passwordmanagerbackend.api.services.UserService;
+import com.spriegade.passwordmanagerbackend.api.entities.User;
+import com.spriegade.passwordmanagerbackend.api.repositories.UserRepository;
 import com.spriegade.passwordmanagerbackend.Services.SessionTokenGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 
-import static com.spriegade.passwordmanagerbackend.API.constants.UserApiConstants.*;
+import static com.spriegade.passwordmanagerbackend.api.constants.UserApiConstants.*;
 
 @RestController
 @RequestMapping(USER_API)
@@ -24,7 +22,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    @Autowired
     public UserController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;

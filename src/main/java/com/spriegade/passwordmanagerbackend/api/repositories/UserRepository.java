@@ -1,6 +1,6 @@
-package com.spriegade.passwordmanagerbackend.API.Repositories;
+package com.spriegade.passwordmanagerbackend.api.repositories;
 
-import com.spriegade.passwordmanagerbackend.API.Entities.User;
+import com.spriegade.passwordmanagerbackend.api.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, String> {

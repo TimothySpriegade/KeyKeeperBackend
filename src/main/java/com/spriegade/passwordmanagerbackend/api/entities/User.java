@@ -1,4 +1,4 @@
-package com.spriegade.passwordmanagerbackend.API.Entities;
+package com.spriegade.passwordmanagerbackend.api.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
