@@ -2,8 +2,6 @@ package com.spriegade.passwordmanagerbackend.api.controller;
 
 import com.spriegade.passwordmanagerbackend.api.entities.User;
 import com.spriegade.passwordmanagerbackend.api.repositories.UserRepository;
-import com.spriegade.passwordmanagerbackend.api.responses.SessionTokenResponse;
-import com.spriegade.passwordmanagerbackend.api.responses.UserCreatedResponse;
 import com.spriegade.passwordmanagerbackend.api.services.UserService;
 import com.spriegade.passwordmanagerbackend.utils.HashSHA256Encryptor;
 import com.spriegade.passwordmanagerbackend.utils.SessionTokenGenerator;
@@ -30,9 +28,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final SessionTokenGenerator sessionTokenGenerator;
-    private final SessionTokenResponse sessionTokenResponse;
     private final HashSHA256Encryptor hashEncryptor;
-    private final UserCreatedResponse userCreatedResponse;
 
     @GetMapping("/")
     public ResponseEntity<String> helloWorld() {
@@ -40,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/getUser/loginUser")
-    public ResponseEntity<SessionTokenResponse> validateUser(@RequestParam String username, String masterPassword) {
+    public ResponseEntity<User> validateUser(@RequestParam String username, String masterPassword) {
         User user = userRepository.findUserByUsername(username);
         String hashesMasterPassword = hashEncryptor.hashStringSHA256(masterPassword);
 
@@ -58,26 +54,15 @@ public class UserController {
         user.setSessionToken(sessionToken);
         userRepository.save(user);
 
-        sessionTokenResponse.setSessionToken(sessionToken);
-        sessionTokenResponse.setSessionTokenValid(true);
-
-        return ResponseEntity.ok(sessionTokenResponse);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/postUser")
-    public ResponseEntity<UserCreatedResponse> createUser(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<User> createUser(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
         String masterPassword = requestBody.get("masterPassword");
-        User existingUser = userRepository.findUserByUsername(username);
-        sessionTokenResponse.setSessionTokenValid(false);
-        if (existingUser == null) {
-            userService.createUser(username, hashEncryptor.hashStringSHA256(masterPassword));
-            userCreatedResponse.setUserCreated(true);
-            return ResponseEntity.ok(userCreatedResponse);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+        return ResponseEntity.ok(userService.createUser(username, hashEncryptor.hashStringSHA256(masterPassword))
+        );
     }
 }
 

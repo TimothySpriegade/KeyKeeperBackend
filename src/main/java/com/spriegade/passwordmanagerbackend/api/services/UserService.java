@@ -20,11 +20,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void createUser(String username, String masterPassword) {
+    public User createUser(String username, String masterPassword) {
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setMasterPassword(masterPassword);
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     public boolean isSessionDate3DaysOld(String username) {
