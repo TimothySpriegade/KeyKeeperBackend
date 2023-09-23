@@ -3,7 +3,10 @@ package com.spriegade.passwordmanagerbackend.api.services;
 import com.spriegade.passwordmanagerbackend.api.entities.User;
 import com.spriegade.passwordmanagerbackend.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,7 +27,11 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setMasterPassword(masterPassword);
-        return userRepository.save(newUser);
+        try {
+            return userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username already existing");
+        }
     }
 
     public boolean isSessionDate3DaysOld(String username) {
