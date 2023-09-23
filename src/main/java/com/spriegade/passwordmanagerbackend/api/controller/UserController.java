@@ -24,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("userApi")
 @RequiredArgsConstructor
+@CrossOrigin
 public class UserController {
 
     private final UserRepository userRepository;
