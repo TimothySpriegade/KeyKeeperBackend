@@ -9,4 +9,5 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SessionTokenResponse {
     private String sessionToken;
+    private boolean isSessionTokenValid;
 }

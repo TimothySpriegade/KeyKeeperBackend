@@ -59,8 +59,10 @@ public class UserController {
             userRepository.save(user);
 
             sessionTokenResponse.setSessionToken(sessionToken);
+            sessionTokenResponse.setSessionTokenValid(true);
         } else {
             sessionTokenResponse.setSessionToken(user.getSessionToken());
+            sessionTokenResponse.setSessionTokenValid(true);
         }
         return ResponseEntity.ok(sessionTokenResponse);
     }
