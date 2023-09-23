@@ -4,6 +4,7 @@ import com.spriegade.passwordmanagerbackend.api.entities.User;
 import com.spriegade.passwordmanagerbackend.api.repositories.UserRepository;
 import com.spriegade.passwordmanagerbackend.api.responses.SessionTokenResponse;
 import com.spriegade.passwordmanagerbackend.api.services.UserService;
+import com.spriegade.passwordmanagerbackend.utils.HashSHA256Encryptor;
 import com.spriegade.passwordmanagerbackend.utils.SessionTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,27 +29,19 @@ public class UserController {
     private final UserService userService;
     private final SessionTokenGenerator sessionTokenGenerator;
     private final SessionTokenResponse sessionTokenResponse;
+    private final HashSHA256Encryptor hashEncryptor;
 
     @GetMapping("/")
     public ResponseEntity<String> helloWorld() {
         return ResponseEntity.ok("Hello World!");
     }
 
-    @GetMapping("/getUser/validateUserExistence")
-    public ResponseEntity<Boolean> getUserExisting(@RequestParam String username) {
-        User user = userRepository.findUserByUsername(username);
-        if (user != null) {
-            return ResponseEntity.ok(true);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/getUser/validate")
+    @GetMapping("/getUser/loginUser")
     public ResponseEntity<SessionTokenResponse> validateUser(@RequestParam String username, String masterPassword) {
         User user = userRepository.findUserByUsername(username);
+        String hashesMasterPassword = hashEncryptor.hashStringSHA256(masterPassword);
 
-        if (user == null || !masterPassword.equals(user.getMasterPassword())) {
+        if (user == null || !hashesMasterPassword.equals(user.getMasterPassword())) {
             return ResponseEntity.notFound().build();
         }
 
@@ -66,8 +59,7 @@ public class UserController {
             userRepository.save(user);
 
             sessionTokenResponse.setSessionToken(sessionToken);
-        }
-        else {
+        } else {
             sessionTokenResponse.setSessionToken(user.getSessionToken());
         }
         return ResponseEntity.ok(sessionTokenResponse);
@@ -79,7 +71,7 @@ public class UserController {
         String masterPassword = requestBody.get("masterPassword");
         User existingUser = userRepository.findUserByUsername(username);
         if (existingUser == null) {
-            userService.createUser(username, masterPassword);
+            userService.createUser(username, hashEncryptor.hashStringSHA256(masterPassword));
             return ResponseEntity.ok("User created successfully.");
         } else {
             return ResponseEntity.notFound().build();
