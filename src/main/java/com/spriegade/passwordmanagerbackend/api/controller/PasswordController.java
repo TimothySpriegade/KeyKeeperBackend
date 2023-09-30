@@ -4,6 +4,7 @@ import com.spriegade.passwordmanagerbackend.api.entities.Password;
 import com.spriegade.passwordmanagerbackend.api.entities.User;
 import com.spriegade.passwordmanagerbackend.api.repositories.PasswordRepository;
 import com.spriegade.passwordmanagerbackend.api.repositories.UserRepository;
+import com.spriegade.passwordmanagerbackend.api.services.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class PasswordController {
 
     private final PasswordRepository passwordRepository;
     private final UserRepository userRepository;
+    private final PasswordService passwordService;
 
 
     @PostMapping("/postPassword")
@@ -31,17 +33,15 @@ public class PasswordController {
             return ResponseEntity.notFound().build();
         }
 
-        Password newPassword = new Password();
-        newPassword.setName(body.get("name"));
-        newPassword.setUsername(body.get("username"));
-        newPassword.setPassword(body.get("password"));
-        newPassword.setUrl(body.get("url"));
-        newPassword.setNotes(body.get("notes"));
-        newPassword.setUser(user);
-
-        passwordRepository.save(newPassword);
+        Password newPassword = passwordService.savePassword(body.get("name"),
+                body.get("password"),
+                body.get("username"),
+                body.get("url"),
+                body.get("notes"),
+                user);
 
         user.getPasswords().add(newPassword);
+        passwordRepository.save(newPassword);
         userRepository.save(user);
 
         return ResponseEntity.ok(user);
