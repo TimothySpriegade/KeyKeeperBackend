@@ -37,7 +37,6 @@ public class PasswordController {
                 body.get("password"),
                 body.get("username"),
                 body.get("url"),
-                body.get("notes"),
                 user);
 
         user.getPasswords().add(newPassword);

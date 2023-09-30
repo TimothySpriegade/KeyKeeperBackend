@@ -23,9 +23,6 @@ public class Password {
     @Column
     private String url;
 
-    @Column
-    private String notes;
-
     @ManyToOne
     @JsonIgnore
     private User user;
