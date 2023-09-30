@@ -1,21 +1,32 @@
 package com.spriegade.passwordmanagerbackend.api.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "passwords")
 public class Password {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String name;
 
-    @NaturalId
+    @Column
     private String password;
+
+    @Column
+    private String username;
+
+    @Column
+    private String url;
+
+    @Column
+    private String notes;
+
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 }

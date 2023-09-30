@@ -3,7 +3,6 @@ package com.spriegade.passwordmanagerbackend.api.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import java.util.Date;
 import java.util.List;
@@ -15,10 +14,6 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
-    private Long id;
-
-    @NaturalId
     private String username;
 
     @Column
@@ -32,6 +27,6 @@ public class User {
     private Date sessionTokenCreated;
 
     @Column
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Password> passwords;
 }
