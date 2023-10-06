@@ -2,6 +2,7 @@ package com.spriegade.passwordmanagerbackend.api.services;
 
 import com.spriegade.passwordmanagerbackend.api.entities.Password;
 import com.spriegade.passwordmanagerbackend.api.entities.User;
+import com.spriegade.passwordmanagerbackend.api.repositories.PasswordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,13 +10,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PasswordService {
 
-    public Password savePassword(String name, String password, String username, String url, User user) {
-        Password toSavePassword = new Password();
-        toSavePassword.setName(name);
-        toSavePassword.setPassword(password);
-        toSavePassword.setUsername(username);
-        toSavePassword.setUrl(url);
-        toSavePassword.setUser(user);
-        return toSavePassword;
+    private final PasswordRepository passwordRepository;
+
+    public Password createPassword(String name, String password, String url, User user) {
+        Password newPassword = new Password();
+        newPassword.setName(name);
+        newPassword.setPassword(password);
+        newPassword.setUrl(url);
+        newPassword.setUser(user);
+
+        return passwordRepository.save(newPassword);
     }
+
+
 }
