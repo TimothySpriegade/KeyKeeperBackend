@@ -6,8 +6,10 @@ import com.spriegade.passwordmanagerbackend.api.services.UserService;
 import com.spriegade.passwordmanagerbackend.utils.HashSHA256Encryptor;
 import com.spriegade.passwordmanagerbackend.utils.SessionTokenGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -33,6 +35,15 @@ public class UserController {
     @GetMapping("/")
     public ResponseEntity<String> helloWorld() {
         return ResponseEntity.ok("Hello World!");
+    }
+
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getUser(@RequestParam String username) { // later add sessionToken
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/getUser/loginUser")
