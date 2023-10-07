@@ -46,6 +46,15 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/getUser/sessionToken")
+    public ResponseEntity<User> getUserBySessionToken(@RequestParam String sessionToken) {
+        User user = userRepository.findUserBySessionToken(sessionToken);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/getUser/loginUser")
     public ResponseEntity<User> validateUser(@RequestParam String username, String masterPassword) {
         User user = userRepository.findUserByUsername(username);
