@@ -81,8 +81,12 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
         String masterPassword = requestBody.get("masterPassword");
-        return ResponseEntity.ok(userService.createUser(username, hashEncryptor.hashStringSHA256(masterPassword))
-        );
+        User user = userRepository.findUserByUsername(username);
+        if (user != null) {
+            return ResponseEntity.notFound().build();
+        }
+        userService.createUser(username, hashEncryptor.hashStringSHA256(masterPassword));
+        return ResponseEntity.ok(userRepository.findUserByUsername(username));
     }
 }
 
