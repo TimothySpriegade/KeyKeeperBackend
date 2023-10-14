@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/passwordGenerationApi")
 @RequiredArgsConstructor
@@ -17,9 +20,13 @@ public class PasswordGenerationController {
     private final PasswordGenerator passwordGenerator;
 
     @GetMapping("/getGeneratedPassword")
-    public ResponseEntity<String> generatePassword() {
+    public ResponseEntity<Map<String, String>> generatePassword() {
         String generatedPassword = passwordGenerator.generatePassword(25, true, true);
-        return ResponseEntity.ok(generatedPassword);
+        System.out.println(generatedPassword);
+        Map<String, String> response = new HashMap<>();
+        response.put("generatedPassword", generatedPassword);
+        return ResponseEntity.ok(response);
+
     }
 
 }
