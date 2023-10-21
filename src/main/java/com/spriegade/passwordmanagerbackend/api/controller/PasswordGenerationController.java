@@ -22,11 +22,9 @@ public class PasswordGenerationController {
     @GetMapping("/getGeneratedPassword")
     public ResponseEntity<Map<String, String>> generatePassword() {
         String generatedPassword = passwordGenerator.generatePassword(25, true, true);
-        System.out.println(generatedPassword);
         Map<String, String> response = new HashMap<>();
         response.put("generatedPassword", generatedPassword);
         return ResponseEntity.ok(response);
-
     }
 
 }

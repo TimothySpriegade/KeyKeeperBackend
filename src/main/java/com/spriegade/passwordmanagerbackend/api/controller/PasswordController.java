@@ -34,7 +34,8 @@ public class PasswordController {
         if (passwordRepository.findPasswordByName(body.get("name")) != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password already existing");
         }
-        Password newPassword = passwordService.createPassword(body.get("name"), body.get("password"), body.get("url"), user);
+        Password newPassword = passwordService.createPassword(body.get("name"), body.get("password"),
+                body.get("url"), body.get("username") , user);
 
 
         user.getPasswords().add(newPassword);

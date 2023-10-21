@@ -12,9 +12,10 @@ public class PasswordService {
 
     private final PasswordRepository passwordRepository;
 
-    public Password createPassword(String name, String password, String url, User user) {
+    public Password createPassword(String name, String password, String url, String username, User user) {
         Password newPassword = new Password();
         newPassword.setName(name);
+        newPassword.setUsername(username);
         newPassword.setPassword(password);
         newPassword.setUrl(url);
         newPassword.setUser(user);
